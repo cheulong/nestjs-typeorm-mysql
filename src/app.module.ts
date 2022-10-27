@@ -2,7 +2,10 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { User } from './typeorm/entities/User';
+import { Post } from './typeorm/entities/post.entity';
+import { Profile } from './typeorm/entities/profile.entity';
+import { User } from './typeorm/entities/user.entity';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -10,13 +13,13 @@ import { User } from './typeorm/entities/User';
       type: 'mysql',
       host: 'localhost',
       port: 3306,
-      name: 'test',
       username: 'long',
       password: '1234',
       database: 'nestjs_mysql',
-      entities: [User],
+      entities: [User, Post, Profile],
       synchronize: true,
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
