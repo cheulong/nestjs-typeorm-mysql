@@ -2,6 +2,7 @@ import { CreateUserDto } from '../../dtos/CreateUser.dto';
 import { CreateUserPostDto } from '../../dtos/CreateUserPost.dto';
 import { CreateUserProfileDto } from '../../dtos/CreateUserProfile.dto';
 import { UpdateUserDto } from '../../dtos/UpdateUser.dto';
+import { plainToClass } from 'class-transformer';
 import {
   Body,
   Controller,
@@ -13,15 +14,20 @@ import {
   Put,
   UsePipes,
   ValidationPipe,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { UsersService } from 'src/users/services/users/users.service';
+import { SerializedUser } from 'src/utils/types/types';
 
 @Controller('users')
 export class UsersController {
   constructor(private userService: UsersService) {}
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
-  getUsers() {
-    return this.userService.findUsers();
+  async getUsers() {
+    const users = await this.userService.findUsers();
+    return users.map((user) => plainToClass(SerializedUser, user));
   }
 
   @Post()

@@ -1,3 +1,5 @@
+import { Exclude } from 'class-transformer';
+
 export type CreateUserParams = {
   username: string;
   password: string;
@@ -19,3 +21,8 @@ export type CreateUserPostParams = {
   title: string;
   description: string;
 };
+
+export class SerializedUser {
+  @Exclude()
+  password: string;
+}
