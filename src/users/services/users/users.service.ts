@@ -71,4 +71,8 @@ export class UsersService {
     });
     return this.postRepository.save(newPost);
   }
+
+  async findOne(username: string): Promise<any | undefined> {
+    return this.userRepository.findOneBy({ username });
+  }
 }
