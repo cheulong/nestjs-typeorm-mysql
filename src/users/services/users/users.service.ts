@@ -10,6 +10,7 @@ import { User } from 'src/typeorm/entities/user.entity';
 import { Profile } from 'src/typeorm/entities/profile.entity';
 import { Post } from 'src/typeorm/entities/post.entity';
 import { Repository } from 'typeorm';
+import { encodePassword } from 'src/utils/types/bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -24,9 +25,11 @@ export class UsersService {
   }
 
   createUser(userDetails: CreateUserParams) {
+    const password = encodePassword(userDetails.password);
     const newUser = this.userRepository.create({
       ...userDetails,
       createdAt: new Date(),
+      password,
     });
     return this.userRepository.save(newUser);
   }
@@ -70,5 +73,9 @@ export class UsersService {
       user,
     });
     return this.postRepository.save(newPost);
+  }
+
+  async findOne(username: string): Promise<any | undefined> {
+    return this.userRepository.findOneBy({ username });
   }
 }
