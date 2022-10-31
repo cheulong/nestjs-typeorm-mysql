@@ -1,16 +1,20 @@
 import {
+  AuthenticatedGuard,
+  LocalAuthGuard,
+} from './../../../utils/LocalGuard';
+import {
   Controller,
-  Request,
+  Req,
   Post,
   UseGuards,
   Get,
   Session,
+  Request,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req) {
     console.log(req.user);
@@ -21,5 +25,13 @@ export class AuthController {
   async getAuthSession(@Session() session: Record<string, any>) {
     console.log(session);
     console.log(session.id);
+    session.authenticated = true;
+    return session;
+  }
+
+  @UseGuards(AuthenticatedGuard)
+  @Get('status')
+  async getAuthStatus(@Req() req: Request) {
+    return req;
   }
 }
