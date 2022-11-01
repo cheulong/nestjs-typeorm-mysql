@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/services/users/users.service';
-import { comparePasswords } from 'src/utils/types/bcrypt';
+import { comparePasswords } from 'src/utils/bcrypt';
 
 @Injectable()
 export class AuthService {
